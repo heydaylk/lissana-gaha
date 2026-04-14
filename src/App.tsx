@@ -41,7 +41,7 @@ export default function App() {
 
       <AnimatePresence mode="wait">
         {gameState === 'START' && (
-          <motion.div 
+          <motion.div
             key="start"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -54,7 +54,7 @@ export default function App() {
             <p className="text-lg mb-8 text-amber-800 font-bold">
               ලිස්සන ගහේ අභියෝගය
             </p>
-            
+
             <div className="flex gap-4 mb-8">
               <div className="flex flex-col items-center">
                 <span className="text-xs uppercase tracking-widest opacity-60 font-bold">වැඩිම ලකුණු</span>
@@ -62,14 +62,14 @@ export default function App() {
               </div>
             </div>
 
-            <button 
+            <button
               onClick={startGame}
               className="group relative flex items-center justify-center w-24 h-24 bg-amber-600 rounded-full text-white shadow-lg hover:bg-amber-700 transition-all hover:scale-110 active:scale-95"
             >
               <Play className="w-12 h-12 fill-current" />
               <div className="absolute inset-0 rounded-full border-4 border-amber-600 animate-ping opacity-20 group-hover:opacity-40" />
             </button>
-            
+
             <p className="mt-8 text-sm font-bold text-amber-900/60 max-w-xs">
               පැත්ත මාරු කිරීමට තට්ටු කරන්න. තෙල් බින්දු මගහැර ඉහළටම යන්න!
             </p>
@@ -93,23 +93,23 @@ export default function App() {
         )}
 
         {gameState === 'PLAYING' && (
-          <motion.div 
+          <motion.div
             key="playing"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="relative w-full h-screen flex items-center justify-center"
           >
             <Game onGameOver={handleGameOver} isPaused={isPaused} isMuted={isMuted} />
-            
+
             {/* HUD */}
             <div className="absolute top-4 right-4 flex gap-2">
-              <button 
+              <button
                 onClick={() => setIsMuted(!isMuted)}
                 className="p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/40 transition-colors"
               >
                 {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
               </button>
-              <button 
+              <button
                 onClick={() => setIsPaused(!isPaused)}
                 className="p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/40 transition-colors"
               >
@@ -121,7 +121,7 @@ export default function App() {
               <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-30 flex items-center justify-center">
                 <div className="bg-white p-8 rounded-2xl text-center shadow-xl">
                   <h2 className="text-2xl font-bold mb-4">විරාමය</h2>
-                  <button 
+                  <button
                     onClick={() => setIsPaused(false)}
                     className="px-8 py-3 bg-amber-600 text-white rounded-full font-bold hover:bg-amber-700"
                   >
@@ -134,7 +134,7 @@ export default function App() {
         )}
 
         {gameState === 'GAMEOVER' && (
-          <motion.div 
+          <motion.div
             key="gameover"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -143,18 +143,18 @@ export default function App() {
             <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-4">
               <Trophy className="w-10 h-10 text-red-600" />
             </div>
-            
+
             <h2 className="text-4xl font-black mb-2 text-red-900 font-serif uppercase">
               ක්‍රීඩාව අවසන්!
             </h2>
-            
+
             <div className="my-6">
               <div className="text-sm uppercase tracking-widest opacity-60 font-bold">ඔබ නැග්ග දුර</div>
               <div className="text-6xl font-black text-amber-900">{score}m</div>
             </div>
 
             {score >= highScore && score > 0 && (
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 className="mb-6 px-4 py-1 bg-yellow-400 text-yellow-900 font-bold rounded-full text-sm uppercase tracking-tighter"
@@ -164,15 +164,15 @@ export default function App() {
             )}
 
             <div className="flex flex-col gap-3 w-full">
-              <button 
+              <button
                 onClick={startGame}
                 className="flex items-center justify-center gap-2 px-8 py-4 bg-amber-600 text-white rounded-full font-bold shadow-lg hover:bg-amber-700 transition-all hover:scale-105 active:scale-95"
               >
                 <RotateCcw size={20} />
                 නැවත උත්සාහ කරන්න
               </button>
-              
-              <button 
+
+              <button
                 onClick={() => setGameState('START')}
                 className="px-8 py-3 bg-white border-2 border-amber-600 text-amber-600 rounded-full font-bold hover:bg-amber-50 transition-all"
               >
@@ -185,7 +185,7 @@ export default function App() {
 
       {/* Footer Branding */}
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.3em] opacity-30 font-bold">
-        Avurudu Traditional Games
+        Heyday Technologies
       </div>
     </div>
   );

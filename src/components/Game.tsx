@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { 
-  CANVAS_WIDTH, 
-  CANVAS_HEIGHT, 
-  POLE_WIDTH, 
-  PLAYER_WIDTH, 
-  PLAYER_HEIGHT, 
-  OBSTACLE_WIDTH, 
+import {
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  POLE_WIDTH,
+  PLAYER_WIDTH,
+  PLAYER_HEIGHT,
+  OBSTACLE_WIDTH,
   OBSTACLE_HEIGHT,
   POWERUP_WIDTH,
   POWERUP_HEIGHT,
@@ -27,10 +27,10 @@ interface GameProps {
 const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [score, setScore] = useState(0);
-  
+
   // Audio Refs
   const audioCtxRef = useRef<AudioContext | null>(null);
-  
+
   const playSound = (type: 'collect' | 'hit' | 'jump') => {
     if (isMuted) return;
     try {
@@ -39,13 +39,13 @@ const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
       }
       const ctx = audioCtxRef.current;
       if (ctx.state === 'suspended') ctx.resume();
-      
+
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      
+
       osc.connect(gain);
       gain.connect(ctx.destination);
-      
+
       if (type === 'collect') {
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(440, ctx.currentTime);
@@ -129,11 +129,11 @@ const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
 
   const spawnItem = useCallback((time: number) => {
     const baseRate = SPAWN_RATE / (1 + scoreRef.current / 1000);
-    const randomFactor = 1.0 + Math.random() * 0.6; 
-    
+    const randomFactor = 1.0 + Math.random() * 0.6;
+
     if (time - lastSpawnTimeRef.current > baseRate * randomFactor) {
       const side = Math.random() > 0.5 ? 'left' : 'right';
-      const xBase = side === 'left' 
+      const xBase = side === 'left'
         ? CANVAS_WIDTH / 2 - POLE_WIDTH / 2
         : CANVAS_WIDTH / 2 + POLE_WIDTH / 2;
 
@@ -201,10 +201,10 @@ const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
     bgOffsetRef.current = (bgOffsetRef.current + (isSlowMo ? 1 : 2)) % 100;
 
     const player = playerRef.current;
-    const targetX = player.side === 'left' 
+    const targetX = player.side === 'left'
       ? CANVAS_WIDTH / 2 - POLE_WIDTH / 2 - PLAYER_WIDTH + 15
       : CANVAS_WIDTH / 2 + POLE_WIDTH / 2 - 15;
-    
+
     player.currentX += (targetX - player.currentX) * 0.3;
 
     spawnItem(time);
@@ -219,7 +219,7 @@ const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
       ) {
         activePowerUpsRef.current.set(pu.type, Date.now() + POWERUP_DURATION);
         playSound('collect');
-        createParticles(pu.x + pu.width/2, pu.y + pu.height/2, COLORS.FESTIVE_YELLOW, 20);
+        createParticles(pu.x + pu.width / 2, pu.y + pu.height / 2, COLORS.FESTIVE_YELLOW, 20);
         return false;
       }
       return pu.y < CANVAS_HEIGHT;
@@ -278,42 +278,42 @@ const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
 
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
     const drawCloud = (x: number, y: number, s: number) => {
-        ctx.beginPath();
-        ctx.arc(x, y, 20 * s, 0, Math.PI * 2);
-        ctx.arc(x + 20 * s, y - 10 * s, 25 * s, 0, Math.PI * 2);
-        ctx.arc(x + 45 * s, y, 20 * s, 0, Math.PI * 2);
-        ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x, y, 20 * s, 0, Math.PI * 2);
+      ctx.arc(x + 20 * s, y - 10 * s, 25 * s, 0, Math.PI * 2);
+      ctx.arc(x + 45 * s, y, 20 * s, 0, Math.PI * 2);
+      ctx.fill();
     };
     drawCloud(50, 120, 1);
     drawCloud(250, 200, 0.8);
     drawCloud(100, 350, 1.2);
 
     for (let i = 0; i < 10; i++) {
-        const flagColors = [COLORS.FESTIVE_RED, COLORS.FESTIVE_YELLOW, COLORS.FESTIVE_GREEN];
-        ctx.fillStyle = flagColors[i % 3];
-        ctx.beginPath();
-        ctx.moveTo(i * 40, 0);
-        ctx.lineTo(i * 40 + 20, 30);
-        ctx.lineTo(i * 40 + 40, 0);
-        ctx.fill();
+      const flagColors = [COLORS.FESTIVE_RED, COLORS.FESTIVE_YELLOW, COLORS.FESTIVE_GREEN];
+      ctx.fillStyle = flagColors[i % 3];
+      ctx.beginPath();
+      ctx.moveTo(i * 40, 0);
+      ctx.lineTo(i * 40 + 20, 30);
+      ctx.lineTo(i * 40 + 40, 0);
+      ctx.fill();
     }
 
     const poleX = CANVAS_WIDTH / 2 - POLE_WIDTH / 2;
     ctx.fillStyle = COLORS.POLE;
     ctx.fillRect(poleX, 0, POLE_WIDTH, CANVAS_HEIGHT);
-    
+
     ctx.fillStyle = COLORS.POLE_HIGHLIGHT;
     for (let i = 0; i < CANVAS_HEIGHT; i += 40) {
-        const y = (i + bgOffsetRef.current) % CANVAS_HEIGHT;
-        ctx.fillRect(poleX + 5, y, 5, 20);
-        ctx.fillRect(poleX + POLE_WIDTH - 10, y + 20, 5, 20);
+      const y = (i + bgOffsetRef.current) % CANVAS_HEIGHT;
+      ctx.fillRect(poleX + 5, y, 5, 20);
+      ctx.fillRect(poleX + POLE_WIDTH - 10, y + 20, 5, 20);
     }
 
     powerUpsRef.current.forEach(pu => {
-      const img = pu.type === 'SHIELD' ? assetsRef.current.shield : 
-                  pu.type === 'SLOW_MO' ? assetsRef.current.slowmo : 
-                  assetsRef.current.multiplier;
-      
+      const img = pu.type === 'SHIELD' ? assetsRef.current.shield :
+        pu.type === 'SLOW_MO' ? assetsRef.current.slowmo :
+          assetsRef.current.multiplier;
+
       if (img) {
         ctx.drawImage(img, pu.x, pu.y, pu.width, pu.height);
       } else {
@@ -330,15 +330,15 @@ const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
           ctx.shadowColor = '#FFD54F';
         }
         ctx.beginPath();
-        ctx.arc(pu.x + pu.width/2, pu.y + pu.height/2, pu.width/2, 0, Math.PI * 2);
+        ctx.arc(pu.x + pu.width / 2, pu.y + pu.height / 2, pu.width / 2, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
-        
+
         ctx.fillStyle = '#fff';
         ctx.font = 'bold 10px sans-serif';
         ctx.textAlign = 'center';
         const label = pu.type === 'SHIELD' ? 'S' : pu.type === 'SLOW_MO' ? 'T' : '2x';
-        ctx.fillText(label, pu.x + pu.width/2, pu.y + pu.height/2 + 4);
+        ctx.fillText(label, pu.x + pu.width / 2, pu.y + pu.height / 2 + 4);
       }
     });
 
@@ -352,7 +352,7 @@ const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
       if (activePowerUpsRef.current.has('MULTIPLIER')) {
         ctx.filter = 'brightness(1.5) contrast(1.2)';
       }
-      
+
       if (player.side === 'right') {
         ctx.translate(player.currentX + player.width, player.y);
         ctx.scale(-1, 1);
@@ -400,12 +400,7 @@ const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
       indicatorY += 20;
     });
 
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.fillRect(0, CANVAS_HEIGHT - 50, CANVAS_WIDTH, 50);
-    ctx.fillStyle = '#fff';
-    ctx.font = '14px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText("පහළින් ජයඝෝෂා පවත්වන පිරිස", CANVAS_WIDTH / 2, CANVAS_HEIGHT - 20);
+
   }, []);
 
   const loop = useCallback((time: number) => {
@@ -431,18 +426,18 @@ const Game: React.FC<GameProps> = ({ onGameOver, isPaused, isMuted }) => {
 
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center bg-amber-50 overflow-hidden">
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10 text-4xl font-bold text-amber-900 drop-shadow-md font-serif">
+      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-[999] text-4xl font-bold text-amber-900 drop-shadow-md font-serif border-4 border-amber-900 bg-white/80 px-6 py-2 rounded-2xl">
         {score}m
       </div>
-      
-      <canvas 
+
+      <canvas
         ref={canvasRef}
         width={CANVAS_WIDTH}
         height={CANVAS_HEIGHT}
         onClick={handleToggle}
         className="max-w-full max-h-[90vh] shadow-2xl rounded-lg cursor-pointer touch-none"
       />
-      
+
       <div className="mt-4 text-amber-800 font-bold animate-pulse text-lg">
         පැත්ත මාරු කිරීමට තට්ටු කරන්න!
       </div>
